@@ -1,18 +1,19 @@
 <?php
 /**
- * Plugin Name: WP Device Login Limit
- * Plugin URI: https://wordpress.org/plugins/wp-device-login-limit/
- * Description: Restrict users to a set number of devices and secure new device logins with OTP verification.
- * Version: 1.0.0
- * Author: Md Laju Miah
- * Author URI: https://profiles.wordpress.org/devlaju/
- * Text Domain: wp-device-login-limit
- * Domain Path:       /languages
+ * Plugin Name:       Device Login Limit for WP
+ * Plugin URI:        https://wpspeedpress.com/device-login-limit-for-wp/
+ * Description:       Restrict users to a set number of devices and secure new device logins with OTP verification.
+ * Version:           1.0.0
+ * Author:            Md Laju Miah
+ * Author URI:        https://profiles.wordpress.org/devlaju/
+ * Text Domain:       device-login-limit-for-wp
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Requires at least: 6.0
  * Requires PHP:      7.4
+ * Stable tag:        1.0.0
  */
+
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -75,7 +76,7 @@ final class WP_Device_Login_Limit {
         if ( ! function_exists( 'wp_mail_smtp' ) ) {
 
             deactivate_plugins( plugin_basename( __FILE__ ) );
-            $title = __( 'Missing SMTP Dependency', 'wp-device-login-limit' );
+            $title = __( 'Missing SMTP Dependency', 'device-login-limit-for-wp' );
            wp_die(
                 '
                 <div style="
@@ -164,8 +165,8 @@ final class WP_Device_Login_Limit {
         $admin_email = get_option( 'admin_email' );
 
         // Compose test email
-        $subject = __( 'WP Device Login Limit: Test Email', 'wp-device-login-limit' );
-        $message = __( 'This is a test email to verify that your SMTP settings are working correctly.', 'wp-device-login-limit' );
+        $subject = __( 'WP Device Login Limit: Test Email', 'device-login-limit-for-wp' );
+        $message = __( 'This is a test email to verify that your SMTP settings are working correctly.', 'device-login-limit-for-wp' );
         $headers = [ 'Content-Type: text/plain; charset=UTF-8' ];
 
         // Try sending the email
@@ -175,7 +176,7 @@ final class WP_Device_Login_Limit {
         if ( ! $sent ) {
 
             deactivate_plugins( plugin_basename( __FILE__ ) );
-            $title = __( 'SMTP Configuration Required', 'wp-device-login-limit' );
+            $title = __( 'SMTP Configuration Required', 'device-login-limit-for-wp' );
             wp_die(
                 '
                 <div style="
@@ -310,7 +311,7 @@ final class WP_Device_Login_Limit {
         if ( $page && $page->post_status === 'publish' ) return;
 
         wp_insert_post([
-            'post_title'   => __( 'Verify Device', 'wp-device-login-limit' ),
+            'post_title'   => __( 'Verify Device', 'device-login-limit-for-wp' ),
             'post_name'    => $slug,
             'post_content' => '[wpdll_otp_form]',
             'post_status'  => 'publish',
@@ -390,15 +391,15 @@ final class WP_Device_Login_Limit {
                 exit;
             }
 
-            $error = __( 'Invalid or expired code.', 'wp-device-login-limit' );
+            $error = __( 'Invalid or expired code.', 'device-login-limit-for-wp' );
         }
 
         // Render OTP form
         ob_start(); ?>
         <div class="wpdll-otp-wrapper" style="display:flex;justify-content:center;align-items:center;height:80vh;">
             <form method="post" class="wpdll-otp-card" style="max-width:400px;width:100%;padding:30px;background:#fff;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,0.1);text-align:center;">
-                <h2 style="margin-bottom:10px;"><?php esc_html_e( 'Verify Device', 'wp-device-login-limit' ); ?></h2>
-                <p style="margin-bottom:20px;"><?php esc_html_e('A verification code has been sent to your email address.', 'wp-device-login-limit');?></p>
+                <h2 style="margin-bottom:10px;"><?php esc_html_e( 'Verify Device', 'device-login-limit-for-wp' ); ?></h2>
+                <p style="margin-bottom:20px;"><?php esc_html_e('A verification code has been sent to your email address.', 'device-login-limit-for-wp');?></p>
                 
                 <?php if ( $error ) : ?>
                     <p class="wpdll-error" style="color:#d63638;margin-bottom:15px;"><?php echo esc_html( $error ); ?></p>
@@ -410,7 +411,7 @@ final class WP_Device_Login_Limit {
                 <input type="number" name="wpdll_otp" required placeholder="123456" style="width:100%;padding:12px;margin-bottom:15px;border-radius:6px;border:1px solid #ccc;text-align:center;">
 
                 <button name="wpdll_verify_otp" style="width:100%;padding:12px;border:none;border-radius:6px;background:#2271b1;color:#fff;font-weight:bold;cursor:pointer;">
-                    <?php esc_html_e( 'Verify & Continue', 'wp-device-login-limit' ); ?>
+                    <?php esc_html_e( 'Verify & Continue', 'device-login-limit-for-wp' ); ?>
                 </button>
             </form>
         </div>
@@ -578,7 +579,7 @@ final class WP_Device_Login_Limit {
                 'device_type' => $device_type,
             ] );
 
-            $subject = __( 'Verify New Device Login', 'wp-device-login-limit' );
+            $subject = __( 'Verify New Device Login', 'device-login-limit-for-wp' );
 
             $message = sprintf(
                 __(
@@ -587,7 +588,7 @@ final class WP_Device_Login_Limit {
                     %2$s is the OTP verification code. 
                     */
                     "Hello %1\$s,\n\nYour verification code is: %2\$s\n\nThis code will expire shortly.\n\nIf you did not request this login, please ignore this email.",
-                    'wp-device-login-limit'
+                    'device-login-limit-for-wp'
                 ),
                 $user->display_name,
                 $otp
@@ -615,7 +616,7 @@ final class WP_Device_Login_Limit {
                     'wpdll_email_failed',
                     __( 
                         'We could not send the verification email at this time. Please configure smtp plugin or contact the site administrator.',
-                        'wp-device-login-limit'
+                        'device-login-limit-for-wp'
                     )
                 );
             }
@@ -640,7 +641,7 @@ final class WP_Device_Login_Limit {
         // Device limit reached
         return new WP_Error(
             'wpdll_limit',
-            __( 'Device limit reached. Contact administrator.', 'wp-device-login-limit' )
+            __( 'Device limit reached. Contact administrator.', 'device-login-limit-for-wp' )
         );
     }
 
@@ -685,31 +686,31 @@ final class WP_Device_Login_Limit {
 
         $devices = get_user_meta( $user->ID, WPDLL_ALLOWED_DEVICES, true );
         ?>
-        <h2 style="margin-top:30px;"><?php esc_html_e( 'Device Login Limit', 'wp-device-login-limit' ); ?></h2>
+        <h2 style="margin-top:30px;"><?php esc_html_e( 'Device Login Limit', 'device-login-limit-for-wp' ); ?></h2>
         <p style="margin-bottom:15px; color:#555;">
-            <?php esc_html_e( 'List of all devices that have accessed this user account. You can delete devices or monitor status.', 'wp-device-login-limit' ); ?>
+            <?php esc_html_e( 'List of all devices that have accessed this user account. You can delete devices or monitor status.', 'device-login-limit-for-wp' ); ?>
         </p>
 
         <?php if ( ! is_array( $devices ) || empty( $devices ) ) : ?>
-            <p style="color:#555;font-style:italic;"><?php esc_html_e( 'No devices registered yet.', 'wp-device-login-limit' ); ?></p>
+            <p style="color:#555;font-style:italic;"><?php esc_html_e( 'No devices registered yet.', 'device-login-limit-for-wp' ); ?></p>
         <?php else : ?>
             <table class="wp-list-table widefat fixed striped">
                 <thead>
                     <tr>
 
-                        <th><?php esc_html_e( 'Device', 'wp-device-login-limit' ); ?></th>
-                        <th><?php esc_html_e( 'User Agent', 'wp-device-login-limit' ); ?></th>                
-                        <th><?php esc_html_e( 'Last Login', 'wp-device-login-limit' ); ?></th>
-                        <th><?php esc_html_e( 'IP Address', 'wp-device-login-limit' ); ?></th>
-                        <th><?php esc_html_e( 'Status', 'wp-device-login-limit' ); ?></th>
-                        <th><?php esc_html_e( 'Actions', 'wp-device-login-limit' ); ?></th>
+                        <th><?php esc_html_e( 'Device', 'device-login-limit-for-wp' ); ?></th>
+                        <th><?php esc_html_e( 'User Agent', 'device-login-limit-for-wp' ); ?></th>                
+                        <th><?php esc_html_e( 'Last Login', 'device-login-limit-for-wp' ); ?></th>
+                        <th><?php esc_html_e( 'IP Address', 'device-login-limit-for-wp' ); ?></th>
+                        <th><?php esc_html_e( 'Status', 'device-login-limit-for-wp' ); ?></th>
+                        <th><?php esc_html_e( 'Actions', 'device-login-limit-for-wp' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ( $devices as $index => $device ) : 
                         $status = isset( $device['status'] ) ? ucfirst( $device['status'] ) : 'Unknown';
                         $status_color = ($status === 'Approved') ? '#27ae60' : '#d63638';
-                        $time = ! empty( $device['time'] ) ? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $device['time'] ) : esc_html__( 'Unknown', 'wp-device-login-limit' );
+                        $time = ! empty( $device['time'] ) ? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $device['time'] ) : esc_html__( 'Unknown', 'device-login-limit-for-wp' );
                         $ip = isset( $device['ip_address'] ) ? esc_html( $device['ip_address'] ) : '-';
                         $device_type = isset( $device['device_type'] ) ? esc_html( $device['device_type'] ) : 'Unknown';
                     ?>

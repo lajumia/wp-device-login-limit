@@ -1,4 +1,4 @@
-=== WP Device Login Limit ===
+=== Device Login Limit for WP ===
 Contributors: devlaju
 Tags: security, login, device limit, user access
 Requires at least: 6.0
